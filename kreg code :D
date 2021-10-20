@@ -1,0 +1,109 @@
+import discord
+import discord_slash
+from discord_slash import *
+from discord_slash.model import *
+from discord_slash.utils.manage_commands import *
+from model import *
+
+c = discord.Client(intents=discord.Intents.all())
+s = discord_slash.SlashCommand(c, sync_commands=True)
+g = [774868449993949195]
+
+@c.event
+async def on_ready():
+    print("Bot connected")
+    activity = discord.Game(name="tax fraud simulator", type=3)
+    await c.change_presence(status=discord.Status.online, activity=activity)
+
+
+# @c.event
+# async def on_message(m):
+#     if m.author == c.user:
+#         return
+#     await m.channel.send(m.content)
+
+@s.slash (name="funny_joke", description="wanna hear a funny joke?", guild_ids=g) 
+async def funny_joke(m):
+    if rsd(m.author.id) >= 10:
+        await gm(m, words="spider cock", emoji= emoji.eggplant)
+    else:
+        await m.send ("You are not deserving of hearing the funny joke.")
+
+@s.slash (name="add_social_kredit", 
+            description="GIVE SOMEONE SOCIAL KREDIT ", 
+            guild_ids=g, 
+            options=[
+                    create_option(name="user", 
+                                    description="Which hard working citizen is deserving of more social kredit?", 
+                                    option_type = 6, 
+                                    required=True),
+                    create_option(name="amounts", 
+                                    description="What amount of social kredit would you like to spare?", 
+                                    option_type = 4, 
+                                    required= True)      
+                                    ])
+async def add_social_kredit(ctx, user, amounts):
+    if amounts > 0:
+        await gm(ctx, f"+{amounts} Social Kredit! Kreg applauds your success!", emoji.happy)
+        msc(id=user.id, amount=amounts)
+    else:
+        await ctx.send ("Please select a positive number!")
+        return
+
+@s.slash(name="help", description= "Kreg's humble profile", guild_ids=g)
+async def help(ctx):
+    await gm(ctx, """
+    Hi there! I'm your local portable social credit bot, AKA: KREG
+    I have some cool commands, but use them properly or else..
+    Kreg is usually friendly, but if you become unruly, Kreg will not hesitate in purging you.
+    
+    Commands:
+    Remove someone's social kredit: /remove_social_kredit
+    Add to someone's social kredit: /add_social_kredit
+    Display someone's social kredit: /display_social_kredit
+
+    So you might be wondering, how does a lowly user like me deserve social Kredit? Well, you can gain Kredit by performing tasks that help build towars the overall betterment of society such as being a friendly user, abiding the rules on a daily basis, as well as praising Kreg's system!
+
+    Failure to comply with Kreg's almighty suggestions will lead to punishment depending on severity of the heresy commited! Kreg hopes users will heed Kreg's warning, and in turn shall become better people!
+
+    Kreg is still in beta, but shall purge all those who dare take advantage of Kreg's friendly nature when Kreg reaches Kreg's final form! 
+
+    My profile: /help
+    """, emoji=None)
+
+@s.slash(name="remove_social_kredit",
+            description="REMOVE SOCIAL KREDIT",
+            guild_ids=g,
+            options=[
+                    create_option(name="user", 
+                                    description="Which low life is desrving of financial purgery?", 
+                                    option_type = 6, 
+                                    required=True),
+                    create_option(name="amounts", 
+                                    description="What amount of social kredit would you like to burn?", 
+                                    option_type = 4, 
+                                    required= True)      
+                                    ])
+async def remove_social_kredit(ctx, user, amounts):
+    if amounts > 0:
+        await gm(ctx, f"-{amounts} Social Kredit! Kreg looks down at you in dissapointment.", emoji.sad)
+        msc(id=user.id, amount=amounts * -1)
+    else:
+        await gm(ctx, "Please select a positive number.", emoji = None)
+        return
+
+@s.slash(name="display_social_kredit", 
+            description="SEE SOMEONE'S SOCIAL KREDIT", 
+            guild_ids=g, options=[
+                    create_option(name="user", 
+                                    description="Which citizen would you like to inspect?", 
+                                    option_type= 6, 
+                                    required=False)
+                                    ])
+async def display_social_kredit(ctx, user = None):
+    if user == None:
+        await gm(ctx, words = (f"Your social kredit is: {rsd(ctx.author.id)}"), emoji=None)
+    else:
+        await gm(ctx, words = (f"Their social kredit is: {rsd(user.id)}"), emoji=None)
+
+c.run ("ODg4NTM2ODUzOTk5OTIzMjIw.YUUIbg.B1CtuTrID1083E2M1tDMMMLhSiQ")
