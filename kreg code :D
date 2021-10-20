@@ -106,4 +106,4 @@ async def display_social_kredit(ctx, user = None):
     else:
         await gm(ctx, words = (f"Their social kredit is: {rsd(user.id)}"), emoji=None)
 
-c.run ("ODg4NTM2ODUzOTk5OTIzMjIw.YUUIbg.B1CtuTrID1083E2M1tDMMMLhSiQ")
+c.run ("TOKEN")
